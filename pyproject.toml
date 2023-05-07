@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "home-telemetry"
+version = "0.1.0"
+description = "Personal app for monitoring the heatpump and general energy consumption and production at home"
+authors = ["Nick Doornekamp <nddoornekamp@gmail.com>"]
+readme = "README.md"
+packages = [{ include = "home-telemetry" }]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+httpx = "^0.24.0"
+python-dotenv = "^1.0.0"
+sqlalchemy = "^2.0.12"
+requests = "^2.30.0"
+types-requests = "^2.30.0.0"
+
+[tool.poetry.dev-dependencies]
+black = "^23.3.0"
+ruff = "^0.0.265"
+mypy = "^1.2.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

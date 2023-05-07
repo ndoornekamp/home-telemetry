@@ -1,0 +1,12 @@
+# Caches
+__pycache__
+*_cache
+
+# Personal settings
+.vscode
+
+# (test) databases
+*.db
+
+# Secrets
+.env
