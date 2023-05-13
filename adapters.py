@@ -1,3 +1,4 @@
+from abc import abstractmethod
 import time
 from datetime import datetime
 
@@ -28,6 +29,10 @@ class BaseAdapter:
             response = requests_retry_get(self.url)
             self.time_of_last_update = datetime.now()
             return response
+
+    @abstractmethod
+    def measure(self) -> list[Measurement]:
+        ...
 
 
 class HeishamonAdapter(BaseAdapter):
