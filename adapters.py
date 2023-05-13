@@ -128,6 +128,7 @@ class SolaxAdapter(BaseAdapter):
             data = response.json()["result"]
         except KeyError:
             print(response.json())
+            self.time_of_last_update = datetime.now()
             return []
 
         return [
