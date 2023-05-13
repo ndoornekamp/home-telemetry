@@ -10,11 +10,16 @@ from models import Measurement
 def fetch_data_all_sources() -> list[Measurement]:
     heishamon_adapter = HeishamonAdapter()
     p1_adapter = P1Adapter(ip_address=P1_IP_ADDRESS)
-    solax_adapter = SolaxAdapter(serial_number=SOLAX_SERIAL_NUMBER, token_id=SOLAX_TOKEN_ID)
+    solax_adapter = SolaxAdapter(
+        serial_number=SOLAX_SERIAL_NUMBER, token_id=SOLAX_TOKEN_ID
+    )
 
     measurements = []
     for adapter in [heishamon_adapter, p1_adapter, solax_adapter]:
-        measurements.extend(adapter.measure())
+        try:
+            measurements.extend(adapter.measure())
+        except Exception as e:
+            print(f"Failed to fetch data from {adapter}: {e}")
 
     return measurements
 
@@ -24,9 +29,10 @@ if __name__ == "__main__":
         try:
             measurements = fetch_data_all_sources()
             save_measurements(measurements)
-            print(f"Successfully fetched and saved data at {datetime.now().isoformat()}")
+            print(
+                f"Fetched and saved {len(measurements)} measurements at {datetime.now().isoformat()}"
+            )
         except Exception as e:
-            print(f"Failed to fetch or save data at {datetime.now().isoformat()}")
-            print(e)
+            print(f"Failed to fetch or save data at {datetime.now().isoformat()}: {e}")
 
-        sleep(5)
+        sleep(1)
