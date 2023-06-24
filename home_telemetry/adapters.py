@@ -110,6 +110,24 @@ class P1Adapter(BaseAdapter):
                 value=float(data["active_power_w"]),
                 measurement_type=MeasurementType.POWER,
                 phasecode=PhaseCode.ALL,
+            ),
+            Measurement(
+                source=self.source,
+                value=float(data["active_voltage_l1_v"]),
+                measurement_type=MeasurementType.VOLTAGE,
+                phasecode=PhaseCode.L1
+            ),
+            Measurement(
+                source=self.source,
+                value=float(data["active_voltage_l2_v"]),
+                measurement_type=MeasurementType.VOLTAGE,
+                phasecode=PhaseCode.L2
+            ),
+            Measurement(
+                source=self.source,
+                value=float(data["active_voltage_l1_v"]),
+                measurement_type=MeasurementType.VOLTAGE,
+                phasecode=PhaseCode.L3
             )
         ]
 

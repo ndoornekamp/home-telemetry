@@ -20,6 +20,7 @@ class MeasurementType(enum.Enum):
     POWER = enum.auto()
     TEMPERATURE = enum.auto()
     FLOW = enum.auto()
+    VOLTAGE = enum.auto()
 
 
 class PhaseCode(enum.Enum):
