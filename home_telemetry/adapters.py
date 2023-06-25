@@ -1,29 +1,27 @@
 from abc import abstractmethod
-import time
+from collections import defaultdict
 from datetime import datetime
+from statistics import mean
 
-from config import (
-    P1_IP_ADDRESS,
-    SOLAX_DATETIME_FORMAT,
-    SOLAX_SERIAL_NUMBER,
-    SOLAX_TOKEN_ID,
-)
-from models import Measurement, MeasurementType, PhaseCode, Source
-from request_retry import requests_retry_get
+from home_telemetry.config import SOLAX_DATETIME_FORMAT
+from home_telemetry.models import Measurement, MeasurementType, PhaseCode, Source
+from home_telemetry.request_retry import requests_retry_get
 
 
 class BaseAdapter:
     def __init__(self):
-        self.url = None
+        self.url: str
+        self.source: Source | None = None
         self.seconds_between_updates: int = 5
         self.time_of_last_update: datetime = datetime(2000, 1, 1)
+        self.aggregation_cache: dict = defaultdict(defaultdict(defaultdict(list).copy).copy)
+        self.aggregation_period_seconds: int = 5 * 60
+        self.time_of_last_aggregation: datetime = datetime.now()
 
     def __str__(self):
         return f"<{self.__class__.__name__}>"
 
     def get_data(self):
-        assert self.url is not None
-
         seconds_since_last_update = (datetime.now() - self.time_of_last_update).total_seconds()
         if seconds_since_last_update > self.seconds_between_updates:
             response = requests_retry_get(self.url)
@@ -33,6 +31,34 @@ class BaseAdapter:
     @abstractmethod
     def measure(self) -> list[Measurement]:
         ...
+
+    def aggregate(self, measurements: list[Measurement]) -> list[Measurement]:
+        for measurement in measurements:
+            self.aggregation_cache[measurement.measurement_type][measurement.phasecode][measurement.description].append(
+                measurement.value
+            )
+
+        # TODO: split this up
+        seconds_since_last_aggregation = (datetime.now() - self.time_of_last_aggregation).total_seconds()
+        if seconds_since_last_aggregation < self.aggregation_period_seconds:
+            return []
+        else:
+            aggregated_measurements = []
+            for measurement_type, cache_per_type in self.aggregation_cache.items():
+                for phasecode, cache_per_phasecode in cache_per_type.items():
+                    for description, measurements_per_phasecode in cache_per_phasecode.items():
+                        aggregated_measurements.append(
+                            Measurement(
+                                source=self.source,
+                                measurement_type=measurement_type,
+                                value=mean(measurements_per_phasecode),
+                                description=description,
+                                phasecode=phasecode,
+                            )
+                        )
+            self.aggregation_cache = defaultdict(defaultdict(defaultdict(list).copy).copy)
+
+            return aggregated_measurements
 
 
 class HeishamonAdapter(BaseAdapter):
@@ -115,20 +141,20 @@ class P1Adapter(BaseAdapter):
                 source=self.source,
                 value=float(data["active_voltage_l1_v"]),
                 measurement_type=MeasurementType.VOLTAGE,
-                phasecode=PhaseCode.L1
+                phasecode=PhaseCode.L1,
             ),
             Measurement(
                 source=self.source,
                 value=float(data["active_voltage_l2_v"]),
                 measurement_type=MeasurementType.VOLTAGE,
-                phasecode=PhaseCode.L2
+                phasecode=PhaseCode.L2,
             ),
             Measurement(
                 source=self.source,
                 value=float(data["active_voltage_l1_v"]),
                 measurement_type=MeasurementType.VOLTAGE,
-                phasecode=PhaseCode.L3
-            )
+                phasecode=PhaseCode.L3,
+            ),
         ]
 
 
@@ -163,16 +189,3 @@ class SolaxAdapter(BaseAdapter):
                 phasecode=PhaseCode.L3,  # Inverter is single phase (L3)
             )
         ]
-
-
-if __name__ == "__main__":
-    heishamon_adapter = HeishamonAdapter()
-    p1_adapter = P1Adapter(ip_address=P1_IP_ADDRESS)
-    solax_adapter = SolaxAdapter(serial_number=SOLAX_SERIAL_NUMBER, token_id=SOLAX_TOKEN_ID)
-
-    for _ in range(10):
-        for adapter in [heishamon_adapter, p1_adapter]:
-            test_response = adapter.measure()
-            print(f"Retrieved {len(test_response)} measurements from {adapter}")
-
-        time.sleep(1)
