@@ -1,14 +1,18 @@
 import datetime
-import matplotlib.pyplot as plt
 
+import matplotlib.pyplot as plt
 from tqdm import tqdm
 
-from database import get_measurements
-from models import MeasurementType, Source
+from home_telemetry.database import get_measurements
+from home_telemetry.models import MeasurementType, Source
 
 if __name__ == "__main__":
-    p1_power_measurements = get_measurements(measurement_type=MeasurementType.POWER, source=Source.HOMEWIZARD_P1)
-    solax_power_measurements = get_measurements(measurement_type=MeasurementType.POWER, source=Source.SOLAX)
+    p1_power_measurements = get_measurements(
+        measurement_type=MeasurementType.POWER, source=Source.HOMEWIZARD_P1, datetime_lte=datetime.datetime(2023, 6, 1)
+    )
+    solax_power_measurements = get_measurements(
+        measurement_type=MeasurementType.POWER, source=Source.SOLAX, datetime_lte=datetime.datetime(2023, 6, 1)
+    )
 
     timestamps_p1 = [measurement.timestamp for measurement in p1_power_measurements]
     values_p1 = [measurement.value for measurement in p1_power_measurements]
@@ -22,9 +26,7 @@ if __name__ == "__main__":
         if measurement.timestamp < avg_timestamp + avg_period:
             avg_values.append(measurement)
         else:
-            values_p1_avg.append(
-                sum([measurement.value for measurement in avg_values])/len(avg_values)
-            )
+            values_p1_avg.append(sum([measurement.value for measurement in avg_values]) / len(avg_values))
             values_p1_undersampled.append(measurement.value)
             timestamps_p1_undersampled.append(measurement.timestamp)
             timestamps_p1_avg.append(avg_timestamp)
@@ -42,9 +44,9 @@ if __name__ == "__main__":
     # ax.plot(timestamps_solax, values_solax)
 
     # Format plot
-    ax.set_xlabel('Date')
-    ax.set_ylabel('Value')
-    ax.set_title('Time Series Plot')
+    ax.set_xlabel("Date")
+    ax.set_ylabel("Value")
+    ax.set_title("Time Series Plot")
     plt.xticks(rotation=45)
     plt.grid(True)
 
