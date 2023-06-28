@@ -21,6 +21,9 @@ ruff = "^0.0.265"
 mypy = "^1.2.0"
 matplotlib = "^3.7.1"
 
+[tool.ruff]
+line-length = 120
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
