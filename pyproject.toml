@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Personal app for monitoring the heatpump and general energy consumption and production at home"
 authors = ["Nick Doornekamp <nddoornekamp@gmail.com>"]
 readme = "README.md"
-packages = [{ include = "home-telemetry" }]
+packages = [{ include = "home_telemetry" }]
 
 [tool.poetry.dependencies]
 python = "^3.9"
