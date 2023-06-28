@@ -76,7 +76,7 @@ from home_telemetry.models import Measurement, MeasurementType, PhaseCode
         ),
     ],
 )
-def test_cache(measurements: list[Measurement], cache_expected):
+def test_adapter_cache(measurements: list[Measurement], cache_expected):
     adapter = BaseAdapter()
 
     adapter.aggregate(measurements)
@@ -84,7 +84,7 @@ def test_cache(measurements: list[Measurement], cache_expected):
     assert adapter.aggregation_cache == cache_expected
 
 
-def test_aggregation():
+def test_adapter_aggregation():
     adapter = BaseAdapter()
     adapter.source = None
     adapter.aggregation_cache = {
