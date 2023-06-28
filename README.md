@@ -16,4 +16,4 @@ Or, if you don't need the dev dependencies:
 
 `poetry install --without-dev`
 
-Then, either open a poetry shell using `poetry shell` and then run the module using `python -m home_telemetry`, or combine the two using `poetry run python -m home_telemetry`.
+Then, either open a poetry shell using `poetry shell` and then run the module using `python -m home_telemetry`, or combine the two using `poetry run python -m home_telemetry`
