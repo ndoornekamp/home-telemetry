@@ -78,37 +78,37 @@ class HeishamonAdapter(BaseAdapter):
             Measurement(
                 source=Source.HEISHAMON,
                 measurement_type=MeasurementType.FLOW,
-                value=[d for d in data if d["Name"] == "Pump_Flow"][0]["Value"],
+                value=float([d for d in data if d["Name"] == "Pump_Flow"][0]["Value"]),
                 description="Pump flow",
             ),
             Measurement(
                 source=Source.HEISHAMON,
                 measurement_type=MeasurementType.TEMPERATURE,
-                value=[d for d in data if d["Name"] == "Main_Inlet_Temp"][0]["Value"],
+                value=float([d for d in data if d["Name"] == "Main_Inlet_Temp"][0]["Value"]),
                 description="Main inlet",
             ),
             Measurement(
                 source=Source.HEISHAMON,
                 measurement_type=MeasurementType.TEMPERATURE,
-                value=[d for d in data if d["Name"] == "Main_Outlet_Temp"][0]["Value"],
+                value=float([d for d in data if d["Name"] == "Main_Outlet_Temp"][0]["Value"]),
                 description="Main outlet",
             ),
             Measurement(
                 source=Source.HEISHAMON,
                 measurement_type=MeasurementType.TEMPERATURE,
-                value=[d for d in data if d["Name"] == "Main_Target_Temp"][0]["Value"],
+                value=float([d for d in data if d["Name"] == "Main_Target_Temp"][0]["Value"]),
                 description="Main target",
             ),
             Measurement(
                 source=Source.HEISHAMON,
                 measurement_type=MeasurementType.TEMPERATURE,
-                value=[d for d in data if d["Name"] == "DHW_Temp"][0]["Value"],
+                value=float([d for d in data if d["Name"] == "DHW_Temp"][0]["Value"]),
                 description="DHW actual",
             ),
             Measurement(
                 source=Source.HEISHAMON,
                 measurement_type=MeasurementType.TEMPERATURE,
-                value=[d for d in data if d["Name"] == "DHW_Target_Temp"][0]["Value"],
+                value=float([d for d in data if d["Name"] == "DHW_Target_Temp"][0]["Value"]),
                 description="DHW target",
             ),
         ]
