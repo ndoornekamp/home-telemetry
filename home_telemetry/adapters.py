@@ -111,6 +111,12 @@ class HeishamonAdapter(BaseAdapter):
                 value=float([d for d in data if d["Name"] == "DHW_Target_Temp"][0]["Value"]),
                 description="DHW target",
             ),
+            Measurement(
+                source=Source.HEISHAMON,
+                measurement_type=MeasurementType.TEMPERATURE,
+                value=float([d for d in data if d["Name"] == "Outside_Temp"][0]["Value"]),
+                description="Outside temperature",
+            ),
         ]
 
         return measurements
