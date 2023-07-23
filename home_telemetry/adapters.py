@@ -57,6 +57,7 @@ class BaseAdapter:
                             )
                         )
             self.aggregation_cache = defaultdict(defaultdict(defaultdict(list).copy).copy)
+            self.time_of_last_aggregation: datetime = datetime.now()
 
             return aggregated_measurements
 
