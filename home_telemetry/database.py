@@ -17,6 +17,7 @@ def save_measurements(measurements: list[Measurement]) -> None:
         for measurement in measurements:
             session.add(measurement)
         session.commit()
+    print(f"Saved {len(measurements)} measurements at {datetime.now().isoformat()}")
 
 
 def get_measurements(

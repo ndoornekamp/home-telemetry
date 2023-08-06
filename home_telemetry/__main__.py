@@ -30,10 +30,6 @@ if __name__ == "__main__":
         try:
             aggregated_measurements = get_aggregated_measurements(adapters=adapters)
             save_measurements(aggregated_measurements)
-
-            print(
-                f"Fetched and saved {len(aggregated_measurements)} measurements at {datetime.now().isoformat()}"
-            )
         except Exception as e:
             print(f"Failed to fetch or save data at {datetime.now().isoformat()}: {e}")
 
