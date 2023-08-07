@@ -30,7 +30,7 @@ if __name__ == "__main__":
         SolaxAdapter(serial_number=SOLAX_SERIAL_NUMBER, token_id=SOLAX_TOKEN_ID),
     ]
 
-    _logger.info(f"Running with the following adapters: {adapters}")
+    _logger.info(f"Running with the following adapters: {[str(adapter) for adapter in adapters]}")
 
     while True:
         try:
