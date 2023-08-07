@@ -1,3 +1,5 @@
+import structlog
+
 from datetime import datetime
 from time import sleep
 
@@ -6,6 +8,8 @@ from home_telemetry.config import P1_IP_ADDRESS, SOLAX_SERIAL_NUMBER, SOLAX_TOKE
 from home_telemetry.database import save_measurements
 from home_telemetry.models import Measurement
 
+_logger = structlog.get_logger(__name__)
+
 
 def get_aggregated_measurements(adapters: list[BaseAdapter]) -> list[Measurement]:
     measurements = []
@@ -13,8 +17,8 @@ def get_aggregated_measurements(adapters: list[BaseAdapter]) -> list[Measurement
         try:
             adapter_measurements = adapter.measure()
             measurements.extend(adapter.aggregate(adapter_measurements))
-        except Exception as e:
-            print(f"Failed to fetch data from {adapter}: {e}")
+        except Exception:
+            _logger.exception(f"Failed to fetch data from {adapter}")
 
     return measurements
 
@@ -26,11 +30,13 @@ if __name__ == "__main__":
         SolaxAdapter(serial_number=SOLAX_SERIAL_NUMBER, token_id=SOLAX_TOKEN_ID),
     ]
 
+    _logger.info(f"Running with the following adapters: {[str(adapter) for adapter in adapters]}")
+
     while True:
         try:
             aggregated_measurements = get_aggregated_measurements(adapters=adapters)
             save_measurements(aggregated_measurements)
-        except Exception as e:
-            print(f"Failed to fetch or save data at {datetime.now().isoformat()}: {e}")
+        except Exception:
+            _logger.exception(f"Failed to fetch or save data at {datetime.now().isoformat()}")
 
         sleep(1)

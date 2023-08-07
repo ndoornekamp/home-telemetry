@@ -1,15 +1,18 @@
+import structlog
+
 from datetime import datetime
 
-from sqlalchemy import create_engine
+from sqlalchemy import Engine, create_engine
 from sqlalchemy.orm import Session
 
 from home_telemetry.models import Base, Measurement, MeasurementType, Source
 
+_logger = structlog.get_logger(__name__)
 engine = create_engine("sqlite:///test.db")
 Base.metadata.create_all(engine)
 
 
-def save_measurements(measurements: list[Measurement]) -> None:
+def save_measurements(measurements: list[Measurement], engine: Engine = engine) -> None:
     if not measurements:
         return
 
@@ -17,7 +20,7 @@ def save_measurements(measurements: list[Measurement]) -> None:
         for measurement in measurements:
             session.add(measurement)
         session.commit()
-    print(f"Saved {len(measurements)} measurements at {datetime.now().isoformat()}")
+    _logger.info(f"Saved {len(measurements)} measurements at {datetime.now().isoformat()}")
 
 
 def get_measurements(
@@ -25,6 +28,7 @@ def get_measurements(
     source: Source,
     datetime_lte: datetime | None = None,
     datetime_gte: datetime | None = None,
+    engine: Engine = engine,
 ) -> list[Measurement]:
     with Session(engine) as session:
         query = session.query(Measurement).filter(
