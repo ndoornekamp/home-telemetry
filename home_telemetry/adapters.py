@@ -1,3 +1,5 @@
+import structlog
+
 from abc import abstractmethod
 from collections import defaultdict
 from datetime import datetime
@@ -6,6 +8,8 @@ from statistics import mean
 from home_telemetry.config import SOLAX_DATETIME_FORMAT
 from home_telemetry.models import Measurement, MeasurementType, PhaseCode, Source
 from home_telemetry.request_retry import requests_retry_get
+
+_logger = structlog.get_logger(__name__)
 
 
 class BaseAdapter:
@@ -183,7 +187,7 @@ class SolaxAdapter(BaseAdapter):
         try:
             data = response.json()["result"]
         except KeyError:
-            print(response.json())
+            _logger.exception("Response does not contain 'result' key", response=response.json())
             self.time_of_last_update = datetime.now()
             return []
 
