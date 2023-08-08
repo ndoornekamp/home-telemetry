@@ -1,10 +1,9 @@
-import requests
-from requests.adapters import HTTPAdapter, Retry
+import httpx
 
 
-def requests_retry_get(url):
-    session = requests.Session()
-    retries = Retry(total=5, backoff_factor=1, status_forcelist=[502, 503, 504])
-    session.mount("http://", HTTPAdapter(max_retries=retries))
+async def requests_retry_get_async(url) -> httpx.Response:
+    transport = httpx.AsyncHTTPTransport(retries=2)
+    async with httpx.AsyncClient(transport=transport) as client:
+        response = await client.get(url)
 
-    return session.get(url)
+    return response
