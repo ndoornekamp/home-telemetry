@@ -1,3 +1,4 @@
+import asyncio
 import structlog
 
 from datetime import datetime
@@ -11,16 +12,14 @@ from home_telemetry.models import Measurement
 _logger = structlog.get_logger(__name__)
 
 
-def get_aggregated_measurements(adapters: list[BaseAdapter]) -> list[Measurement]:
-    measurements = []
-    for adapter in adapters:
-        try:
-            adapter_measurements = adapter.measure()
-            measurements.extend(adapter.aggregate(adapter_measurements))
-        except Exception:
-            _logger.exception(f"Failed to fetch data from {adapter}")
+async def get_tasks(adapters: list[BaseAdapter]) -> list[asyncio.Task]:
+    tasks = [asyncio.create_task(adapter.update()) for adapter in adapters]
+    return [await task for task in tasks]
 
-    return measurements
+
+def get_aggregated_measurements(adapters: list[BaseAdapter]) -> list[Measurement]:
+    results = asyncio.run(get_tasks(adapters))
+    return [measurement for result in results for measurement in result]
 
 
 if __name__ == "__main__":

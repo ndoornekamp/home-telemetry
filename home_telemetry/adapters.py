@@ -7,7 +7,7 @@ from statistics import mean
 
 from home_telemetry.config import SOLAX_DATETIME_FORMAT
 from home_telemetry.models import Measurement, MeasurementType, PhaseCode, Source
-from home_telemetry.request_retry import requests_retry_get
+from home_telemetry.request_retry import requests_retry_get_async
 
 _logger = structlog.get_logger(__name__)
 
@@ -15,7 +15,7 @@ _logger = structlog.get_logger(__name__)
 class BaseAdapter:
     def __init__(self):
         self.url: str
-        self.source: Source | None = None
+        self.source: Source
         self.seconds_between_updates: int = 5
         self.time_of_last_update: datetime = datetime(2000, 1, 1)
         self.aggregation_cache: dict = defaultdict(defaultdict(defaultdict(list).copy).copy)
@@ -25,15 +25,15 @@ class BaseAdapter:
     def __str__(self):
         return f"<{self.__class__.__name__}>"
 
-    def get_data(self):
+    async def fetch_data(self):
         seconds_since_last_update = (datetime.now() - self.time_of_last_update).total_seconds()
         if seconds_since_last_update > self.seconds_between_updates:
-            response = requests_retry_get(self.url)
+            response = await requests_retry_get_async(self.url)
             self.time_of_last_update = datetime.now()
             return response
 
     @abstractmethod
-    def measure(self) -> list[Measurement]:
+    async def measure(self) -> list[Measurement]:
         ...
 
     def aggregate(self, measurements: list[Measurement]) -> list[Measurement]:
@@ -65,6 +65,15 @@ class BaseAdapter:
 
             return aggregated_measurements
 
+    async def update(self) -> list[Measurement]:
+        """
+        Updates the aggregation cache and returns a list of aggregated measurements if self.aggregation_period_seconds
+        has passed
+        """
+        measurements = await self.measure()
+        _logger.info(f"Retrieved {len(measurements)} measurements from {self}")
+        return self.aggregate(measurements=measurements)
+
 
 class HeishamonAdapter(BaseAdapter):
     def __init__(self):
@@ -72,8 +81,8 @@ class HeishamonAdapter(BaseAdapter):
         self.url = "http://heishamon.local/json"
         self.source = Source.HEISHAMON
 
-    def measure(self) -> list[Measurement]:
-        response = self.get_data()
+    async def measure(self) -> list[Measurement]:
+        response = await self.fetch_data()
 
         if not response:
             return []
@@ -133,8 +142,8 @@ class P1Adapter(BaseAdapter):
         self.url = f"http://{ip_address}/api/v1/data"
         self.source = Source.HOMEWIZARD_P1
 
-    def measure(self) -> list[Measurement]:
-        response = self.get_data()
+    async def measure(self) -> list[Measurement]:
+        response = await self.fetch_data()
 
         if not response:
             return []
@@ -178,8 +187,8 @@ class SolaxAdapter(BaseAdapter):
         self.source = Source.SOLAX
         self.seconds_between_updates: int = 5 * 60
 
-    def measure(self) -> list[Measurement]:
-        response = self.get_data()
+    async def measure(self) -> list[Measurement]:
+        response = await self.fetch_data()
 
         if not response:
             return []
