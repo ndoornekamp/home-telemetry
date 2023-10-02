@@ -28,6 +28,7 @@ def get_measurements(
     source: Source,
     datetime_lte: datetime | None = None,
     datetime_gte: datetime | None = None,
+    description: str | None = None,
     engine: Engine = engine,
 ) -> list[Measurement]:
     with Session(engine) as session:
@@ -41,5 +42,8 @@ def get_measurements(
 
     if datetime_gte:
         query = query.filter(Measurement.timestamp >= datetime_gte)
+
+    if description:
+        query = query.filter(Measurement.description == description)
 
     return query.all()

@@ -22,6 +22,8 @@ black = "^23.3.0"
 ruff = "^0.0.265"
 mypy = "^1.2.0"
 matplotlib = "^3.7.1"
+tqdm = "^4.66.1"
+pyqt5 = "^5.15.9"
 
 [tool.ruff]
 line-length = 120
