@@ -1,0 +1,20 @@
+# Docker build sends a whole directory to the docker host.
+# The contents of .git and venv are big and useless, so ignore then.
+.git
+
+# IDEs
+.vscode
+
+# Caches
+**/.*_cache
+**/.coverage
+**/coverage.xml
+**/__pycache__
+
+# Build directories
+**/build
+**/dist
+
+# Tests
+**/tests
+**/test_resources

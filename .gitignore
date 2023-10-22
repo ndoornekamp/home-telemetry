@@ -2,6 +2,10 @@
 __pycache__
 *_cache
 
+# Build files (requirements are locked in pyproject.toml - requirements.txt is only used for buildin the Dockerfile
+# without the need for installing poetry in it
+requirements.txt
+
 # Personal settings
 .vscode
 
