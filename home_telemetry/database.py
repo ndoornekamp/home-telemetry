@@ -2,13 +2,22 @@ import structlog
 
 from datetime import datetime
 
-from sqlalchemy import Engine, create_engine
+from sqlalchemy import URL, Engine, create_engine
 from sqlalchemy.orm import Session
 
 from home_telemetry.models import Base, Measurement, MeasurementType, Source
 
 _logger = structlog.get_logger(__name__)
-engine = create_engine("sqlite:///test.db")
+
+database_url = URL.create(
+    "postgresql+psycopg2",
+    username="home_telemetry",
+    password="changeme",  # TODO: Move to Kubernetes secret later?
+    host="127.0.0.1",
+    port=5432,  # Default port
+    database="postgres",
+)
+engine = create_engine(database_url)
 Base.metadata.create_all(engine)
 
 

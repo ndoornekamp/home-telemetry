@@ -1,0 +1,19 @@
+services:
+  db:
+    image: "postgres:16-alpine"
+    network_mode: "host"
+    environment:
+      POSTGRES_PASSWORD: changeme
+      POSTGRES_USER: home_telemetry
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "5432:5432"
+  app:
+    depends_on:
+      db:
+        condition: service_started
+        restart: true
+    network_mode: "host"
+    build: .
+    env_file:
+      - .env

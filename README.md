@@ -36,8 +36,8 @@ poetry run python -m home_telemetry
 
 ## Docker
 
-Build the Docker image by running the build script: `sh build.sh`. Then run a container with that image using
+Build the Docker image by running the build script: `sh build.sh`. Then run a container with that image alongside a Postgres database using
 
 ```bash
-docker run --env-file .env home_telemetry
+docker compose up
 ```
