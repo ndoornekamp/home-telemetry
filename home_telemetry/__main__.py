@@ -5,7 +5,7 @@ from datetime import datetime
 from time import sleep
 
 from home_telemetry.adapters import BaseAdapter, HeishamonAdapter, P1Adapter, SolaxAdapter
-from home_telemetry.config import P1_IP_ADDRESS, SOLAX_SERIAL_NUMBER, SOLAX_TOKEN_ID
+from home_telemetry.config import P1_IP_ADDRESS, SOLAX_SERIAL_NUMBER, SOLAX_TOKEN_ID, HEISHAMON_IP_ADDRESS
 from home_telemetry.database import save_measurements
 from home_telemetry.models import Measurement
 
@@ -24,7 +24,7 @@ def get_aggregated_measurements(adapters: list[BaseAdapter]) -> list[Measurement
 
 if __name__ == "__main__":
     adapters = [
-        HeishamonAdapter(),
+        HeishamonAdapter(ip_address=HEISHAMON_IP_ADDRESS),
         P1Adapter(ip_address=P1_IP_ADDRESS),
         SolaxAdapter(serial_number=SOLAX_SERIAL_NUMBER, token_id=SOLAX_TOKEN_ID),
     ]

@@ -27,6 +27,7 @@ SOLAX_TOKEN_ID = get_required_env_var("SOLAX_TOKEN_ID")
 SOLAX_SERIAL_NUMBER = get_required_env_var("SOLAX_SERIAL_NUMBER")
 SOLAX_DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"  # e.g. '2023-05-06 16:21:24'
 P1_IP_ADDRESS = get_required_env_var("P1_IP_ADDRESS")
+HEISHAMON_IP_ADDRESS = get_required_env_var("HEISHAMON_IP_ADDRESS")
 
 DATABASE_TYPE = DatabaseType(os.getenv("DATABASE", "sqlite"))
 
