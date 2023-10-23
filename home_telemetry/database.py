@@ -4,20 +4,25 @@ from datetime import datetime
 
 from sqlalchemy import URL, Engine, create_engine
 from sqlalchemy.orm import Session
+from home_telemetry import config
+from home_telemetry.config import DatabaseType
 
 from home_telemetry.models import Base, Measurement, MeasurementType, Source
 
 _logger = structlog.get_logger(__name__)
 
-database_url = URL.create(
-    "postgresql+psycopg2",
-    username="home_telemetry",
-    password="changeme",  # TODO: Move to Kubernetes secret later?
-    host="127.0.0.1",
-    port=5432,  # Default port
-    database="postgres",
-)
-engine = create_engine(database_url)
+if config.DATABASE_TYPE == DatabaseType.POSTGRES:
+    database_url = URL.create(
+        drivername="postgresql+psycopg2",
+        username=config.POSTGRES_DATABASE_NAME,
+        password=config.POSTGRES_PASSWORD,
+        host=config.POSTGRES_HOST,
+        port=config.POSTGRES_PORT,
+        database=config.POSTGRES_DATABASE_NAME,
+    )
+    engine = create_engine(database_url)
+else:
+    engine = create_engine("sqlite:///test.db")
 Base.metadata.create_all(engine)
 
 
