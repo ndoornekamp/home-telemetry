@@ -14,11 +14,11 @@ _logger = structlog.get_logger(__name__)
 if config.DATABASE_TYPE == DatabaseType.POSTGRES:
     database_url = URL.create(
         drivername="postgresql+psycopg2",
-        username=config.POSTGRES_DATABASE_NAME,
+        username=config.POSTGRES_USER,
         password=config.POSTGRES_PASSWORD,
         host=config.POSTGRES_HOST,
         port=config.POSTGRES_PORT,
-        database=config.POSTGRES_DATABASE_NAME,
+        database=config.POSTGRES_DB,
     )
     engine = create_engine(database_url)
 else:

@@ -36,4 +36,4 @@ if DATABASE_TYPE == DatabaseType.POSTGRES:
     POSTGRES_PASSWORD = get_required_env_var("POSTGRES_PASSWORD")
     POSTGRES_HOST = get_required_env_var("POSTGRES_HOST")
     POSTGRES_PORT = int(get_required_env_var("POSTGRES_PORT"))
-    POSTGRES_DATABASE_NAME = get_required_env_var("POSTGRES_DATABASE_NAME")
+    POSTGRES_DB = get_required_env_var("POSTGRES_DB")
