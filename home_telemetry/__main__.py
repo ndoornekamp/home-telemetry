@@ -5,7 +5,13 @@ from datetime import datetime
 from time import sleep
 
 from home_telemetry.adapters import BaseAdapter, HeishamonAdapter, P1Adapter, SolaxAdapter
-from home_telemetry.config import P1_IP_ADDRESS, SOLAX_SERIAL_NUMBER, SOLAX_TOKEN_ID, HEISHAMON_IP_ADDRESS
+from home_telemetry.config import (
+    P1_IP_ADDRESS,
+    SOLAX_SERIAL_NUMBER,
+    SOLAX_TOKEN_ID,
+    HEISHAMON_IP_ADDRESS,
+    DATABASE_TYPE,
+)
 from home_telemetry.database import save_measurements
 from home_telemetry.models import Measurement
 
@@ -30,6 +36,7 @@ if __name__ == "__main__":
     ]
 
     _logger.info(f"Running with the following adapters: {[str(adapter) for adapter in adapters]}")
+    _logger.info(f"Saving measurements to {DATABASE_TYPE}")
 
     while True:
         try:

@@ -78,7 +78,7 @@ class BaseAdapter:
 class HeishamonAdapter(BaseAdapter):
     def __init__(self, ip_address: str):
         super().__init__()
-        self.url = "http://{ip_address}/json"
+        self.url = f"http://{ip_address}/json"
         self.source = Source.HEISHAMON
 
     async def measure(self) -> list[Measurement]:
