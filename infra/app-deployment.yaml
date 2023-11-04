@@ -1,83 +1,66 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    kompose.cmd: kompose convert
-    kompose.version: 1.31.2 (a92241f79)
-  creationTimestamp: null
-  labels:
-    io.kompose.service: app
-  name: app
+  name: home_telemetry_app
 spec:
   replicas: 1
-  selector:
-    matchLabels:
-      io.kompose.service: app
-  strategy: {}
   template:
     metadata:
-      annotations:
-        kompose.cmd: kompose convert
-        kompose.version: 1.31.2 (a92241f79)
-      creationTimestamp: null
       labels:
-        io.kompose.network/opt-default: "true"
-        io.kompose.service: app
+        k8s-app: home_telemetry
     spec:
       containers:
-        - env:
-            - name: DATABASE
-              valueFrom:
-                configMapKeyRef:
-                  key: DATABASE
-                  name: opt--env
-            - name: HEISHAMON_IP_ADDRESS
-              valueFrom:
-                configMapKeyRef:
-                  key: HEISHAMON_IP_ADDRESS
-                  name: opt--env
-            - name: P1_IP_ADDRESS
-              valueFrom:
-                configMapKeyRef:
-                  key: P1_IP_ADDRESS
-                  name: opt--env
-            - name: POSTGRES_DB
-              valueFrom:
-                configMapKeyRef:
-                  key: POSTGRES_DB
-                  name: opt--env
-            - name: POSTGRES_HOST
-              valueFrom:
-                configMapKeyRef:
-                  key: POSTGRES_HOST
-                  name: opt--env
-            - name: POSTGRES_PASSWORD
-              valueFrom:
-                configMapKeyRef:
-                  key: POSTGRES_PASSWORD
-                  name: opt--env
-            - name: POSTGRES_PORT
-              valueFrom:
-                configMapKeyRef:
-                  key: POSTGRES_PORT
-                  name: opt--env
-            - name: POSTGRES_USER
-              valueFrom:
-                configMapKeyRef:
-                  key: POSTGRES_USER
-                  name: opt--env
-            - name: SOLAX_SERIAL_NUMBER
-              valueFrom:
-                configMapKeyRef:
-                  key: SOLAX_SERIAL_NUMBER
-                  name: opt--env
-            - name: SOLAX_TOKEN_ID
-              valueFrom:
-                configMapKeyRef:
-                  key: SOLAX_TOKEN_ID
-                  name: opt--env
-          image: app
-          name: app
-          resources: {}
-      restartPolicy: Always
-status: {}
+        - name: home_telemetry_app
+          image: home_telemetry
+          imagePullPolicy: "IfNotPresent"
+          env:
+              - name: DATABASE
+                valueFrom:
+                  configMapKeyRef:
+                    key: DATABASE
+                    name: home-telemetry-config
+              - name: HEISHAMON_IP_ADDRESS
+                valueFrom:
+                  configMapKeyRef:
+                    key: HEISHAMON_IP_ADDRESS
+                    name: home-telemetry-config
+              - name: P1_IP_ADDRESS
+                valueFrom:
+                  configMapKeyRef:
+                    key: P1_IP_ADDRESS
+                    name: home-telemetry-config
+              - name: POSTGRES_DB
+                valueFrom:
+                  configMapKeyRef:
+                    key: POSTGRES_DB
+                    name: home-telemetry-config
+              - name: POSTGRES_HOST
+                valueFrom:
+                  configMapKeyRef:
+                    key: POSTGRES_HOST
+                    name: home-telemetry-config
+              - name: POSTGRES_PASSWORD
+                valueFrom:
+                  configMapKeyRef:
+                    key: POSTGRES_PASSWORD
+                    name: home-telemetry-config
+              - name: POSTGRES_PORT
+                valueFrom:
+                  configMapKeyRef:
+                    key: POSTGRES_PORT
+                    name: home-telemetry-config
+              - name: POSTGRES_USER
+                valueFrom:
+                  configMapKeyRef:
+                    key: POSTGRES_USER
+                    name: home-telemetry-config
+              - name: SOLAX_SERIAL_NUMBER
+                valueFrom:
+                  configMapKeyRef:
+                    key: SOLAX_SERIAL_NUMBER
+                    name: home-telemetry-config
+              - name: SOLAX_TOKEN_ID
+                valueFrom:
+                  configMapKeyRef:
+                    key: SOLAX_TOKEN_ID
+                    name: home-telemetry-config
