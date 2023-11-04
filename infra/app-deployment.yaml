@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: home-telemetry-app
-          image: home_telemetry
+          image: ndoornekamp/home_telemetry:buildx-latest
           imagePullPolicy: "IfNotPresent"
           env:
               - name: DATABASE
