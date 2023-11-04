@@ -7,10 +7,10 @@ spec:
   template:
     metadata:
       labels:
-        k8s-app: home_telemetry
+        k8s-app: app
     spec:
       containers:
-        - name: home_telemetry_app
+        - name: app
           image: home_telemetry
           imagePullPolicy: "IfNotPresent"
           env:
