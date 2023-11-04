@@ -5,7 +5,8 @@ metadata:
 spec:
   replicas: 1
   selector:
-    app: home-telemetry-app
+    matchLabels:
+      app: home-telemetry-app
   template:
     metadata:
       labels:
