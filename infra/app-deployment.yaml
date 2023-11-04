@@ -2,15 +2,19 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: app
+  labels:
+    k8s-app: home-telemetry-app
 spec:
   replicas: 1
+  selector:
+    k8s-app: home-telemetry-app
   template:
     metadata:
       labels:
-        k8s-app: app
+        k8s-app: home-telemetry-app
     spec:
       containers:
-        - name: app
+        - name: home-telemetry-app
           image: home_telemetry
           imagePullPolicy: "IfNotPresent"
           env:
