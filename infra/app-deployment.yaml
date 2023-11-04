@@ -1,15 +1,15 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app
+  name: home-telemetry-deployment
 spec:
   replicas: 1
   selector:
-    k8s-app: home-telemetry-app
+    app: home-telemetry-app
   template:
     metadata:
       labels:
-        k8s-app: home-telemetry-app
+        app: home-telemetry-app
     spec:
       containers:
         - name: home-telemetry-app
