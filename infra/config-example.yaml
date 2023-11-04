@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: home-telemetry-config
+data:
+  DATABASE:
+  HEISHAMON_IP_ADDRESS:
+  P1_IP_ADDRESS:
+  POSTGRES_DB:
+  POSTGRES_HOST:
+  POSTGRES_PASSWORD:
+  POSTGRES_PORT:
+  POSTGRES_USER:
+  SOLAX_SERIAL_NUMBER:
+  SOLAX_TOKEN_ID:

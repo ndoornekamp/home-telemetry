@@ -14,3 +14,4 @@ requirements.txt
 
 # Secrets
 .env
+infra/config.yaml
