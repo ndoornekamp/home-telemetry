@@ -171,7 +171,7 @@ class P1Adapter(BaseAdapter):
             ),
             Measurement(
                 source=self.source,
-                value=float(data["active_voltage_l1_v"]),
+                value=float(data["active_voltage_l3_v"]),
                 measurement_type=MeasurementType.VOLTAGE,
                 phasecode=PhaseCode.L3,
             ),
