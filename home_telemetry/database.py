@@ -39,8 +39,8 @@ def save_measurements(measurements: list[Measurement], engine: Engine = engine) 
 
 def get_measurements(
     measurement_type: MeasurementType,
-    phase_code: PhaseCode,
     source: Source,
+    phase_code: PhaseCode | None = None,
     datetime_lte: datetime | None = None,
     datetime_gte: datetime | None = None,
     description: str | None = None,
