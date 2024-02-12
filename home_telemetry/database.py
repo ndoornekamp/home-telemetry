@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from home_telemetry import config
 from home_telemetry.config import DatabaseType
 
-from home_telemetry.models import Base, Measurement, MeasurementType, Source
+from home_telemetry.models import Base, Measurement, MeasurementType, PhaseCode, Source
 
 _logger = structlog.get_logger(__name__)
 
@@ -39,6 +39,7 @@ def save_measurements(measurements: list[Measurement], engine: Engine = engine) 
 
 def get_measurements(
     measurement_type: MeasurementType,
+    phase_code: PhaseCode,
     source: Source,
     datetime_lte: datetime | None = None,
     datetime_gte: datetime | None = None,
@@ -60,4 +61,7 @@ def get_measurements(
     if description:
         query = query.filter(Measurement.description == description)
 
-    return query.all()
+    if phase_code:
+        query = query.filter(Measurement.phasecode == phase_code)
+
+    return query.order_by(Measurement.timestamp).all()
