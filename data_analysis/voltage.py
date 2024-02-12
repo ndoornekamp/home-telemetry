@@ -37,7 +37,7 @@ def voltage():
     # Create plot
     fig, ax = plt.subplots()
     ax.plot(timestamps, values_l1, label="Voltage L1")
-    # ax.plot(timestamps, values_l2, label="Voltage L2")
-    # ax.plot(timestamps, values_l3, label="Voltage L3")
+    ax.plot(timestamps, values_l2, label="Voltage L2")
+    ax.plot(timestamps, values_l3, label="Voltage L3")
 
     display_plot(ax)
