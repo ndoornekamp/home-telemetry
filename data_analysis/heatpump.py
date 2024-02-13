@@ -6,9 +6,7 @@ from home_telemetry.models import MeasurementType, Source
 
 
 def heatpump_analysis():
-    heatpump_flow_measurements = get_measurements(
-        measurement_type=MeasurementType.FLOW, source=Source.HEISHAMON
-    )
+    heatpump_flow_measurements = get_measurements(measurement_type=MeasurementType.FLOW, source=Source.HEISHAMON)
     heatpump_main_inlet_measurements = get_measurements(
         measurement_type=MeasurementType.TEMPERATURE,
         source=Source.HEISHAMON,

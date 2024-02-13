@@ -47,7 +47,7 @@ def mock_adapter_2():
             value=230.0,
             description="test description",
             phasecode=PhaseCode.L3,
-        )
+        ),
     ]
 
     adapter = BaseAdapter()

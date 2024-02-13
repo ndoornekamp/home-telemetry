@@ -12,21 +12,21 @@ def voltage():
         measurement_type=MeasurementType.VOLTAGE,
         source=Source.HOMEWIZARD_P1,
         datetime_gte=datetime(2023, 12, 23),
-        phase_code=PhaseCode.L1
+        phase_code=PhaseCode.L1,
     )
 
     p1_voltage_measurements_l2 = get_measurements(
         measurement_type=MeasurementType.VOLTAGE,
         source=Source.HOMEWIZARD_P1,
         datetime_gte=datetime(2023, 12, 23),
-        phase_code=PhaseCode.L2
+        phase_code=PhaseCode.L2,
     )
 
     p1_voltage_measurements_l3 = get_measurements(
         measurement_type=MeasurementType.VOLTAGE,
         source=Source.HOMEWIZARD_P1,
         datetime_gte=datetime(2023, 12, 23),
-        phase_code=PhaseCode.L3
+        phase_code=PhaseCode.L3,
     )
 
     timestamps = [measurement.timestamp for measurement in p1_voltage_measurements_l1]

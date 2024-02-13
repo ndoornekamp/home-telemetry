@@ -40,7 +40,5 @@ class Measurement(Base):
     timestamp: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
     source: Mapped[Source] = mapped_column(Enum(Source))
     measurement_type: Mapped[MeasurementType] = mapped_column(Enum(MeasurementType))
-    phasecode: Mapped[PhaseCode] = mapped_column(
-        Enum(PhaseCode), default=PhaseCode.NONE
-    )
+    phasecode: Mapped[PhaseCode] = mapped_column(Enum(PhaseCode), default=PhaseCode.NONE)
     description: Mapped[str] = mapped_column(String, default=None, nullable=True)
