@@ -1,13 +1,13 @@
+from datetime import datetime
+
 import matplotlib.pyplot as plt
 
-
-from datetime import datetime
 from data_analysis.plotting import display_plot
 from home_telemetry.database import get_measurements
 from home_telemetry.models import MeasurementType, PhaseCode, Source
 
 
-def voltage():
+def voltage() -> None:
     p1_voltage_measurements_l1 = get_measurements(
         measurement_type=MeasurementType.VOLTAGE,
         source=Source.HOMEWIZARD_P1,

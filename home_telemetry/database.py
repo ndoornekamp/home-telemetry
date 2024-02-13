@@ -1,12 +1,11 @@
-import structlog
-
 from datetime import datetime
 
+import structlog
 from sqlalchemy import URL, Engine, create_engine
 from sqlalchemy.orm import Session
+
 from home_telemetry import config
 from home_telemetry.config import DatabaseType
-
 from home_telemetry.models import Base, Measurement, MeasurementType, PhaseCode, Source
 
 _logger = structlog.get_logger(__name__)

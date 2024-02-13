@@ -1,7 +1,8 @@
 import matplotlib.pyplot as plt
+from matplotlib.axes import Axes
 
 
-def display_plot(ax):
+def display_plot(ax: Axes) -> None:
     ax.set_xlabel("Date")
     ax.set_ylabel("Value")
     ax.set_title("Time Series Plot")

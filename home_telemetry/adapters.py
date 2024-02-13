@@ -1,9 +1,10 @@
-import structlog
-
 from abc import abstractmethod
 from collections import defaultdict
 from datetime import datetime
 from statistics import mean
+
+import structlog
+from httpx import Response
 
 from home_telemetry.config import SOLAX_DATETIME_FORMAT
 from home_telemetry.models import Measurement, MeasurementType, PhaseCode, Source
@@ -13,7 +14,7 @@ _logger = structlog.get_logger(__name__)
 
 
 class BaseAdapter:
-    def __init__(self):
+    def __init__(self) -> None:
         self.url: str
         self.source: Source
         self.seconds_between_updates: int = 5
@@ -22,15 +23,17 @@ class BaseAdapter:
         self.aggregation_period_seconds: int = 5 * 60
         self.time_of_last_aggregation: datetime = datetime.now()
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"<{self.__class__.__name__}>"
 
-    async def fetch_data(self):
+    async def fetch_data(self) -> Response | None:
         seconds_since_last_update = (datetime.now() - self.time_of_last_update).total_seconds()
         if seconds_since_last_update > self.seconds_between_updates:
             response = await requests_retry_get_async(self.url)
             self.time_of_last_update = datetime.now()
             return response
+
+        return None
 
     @abstractmethod
     async def measure(self) -> list[Measurement]:
@@ -39,31 +42,31 @@ class BaseAdapter:
     def aggregate(self, measurements: list[Measurement]) -> list[Measurement]:
         for measurement in measurements:
             self.aggregation_cache[measurement.measurement_type][measurement.phasecode][measurement.description].append(
-                measurement.value
+                measurement.value,
             )
 
         # TODO: split this up
         seconds_since_last_aggregation = (datetime.now() - self.time_of_last_aggregation).total_seconds()
         if seconds_since_last_aggregation < self.aggregation_period_seconds:
             return []
-        else:
-            aggregated_measurements = []
-            for measurement_type, cache_per_type in self.aggregation_cache.items():
-                for phasecode, cache_per_phasecode in cache_per_type.items():
-                    for description, measurements_per_phasecode in cache_per_phasecode.items():
-                        aggregated_measurements.append(
-                            Measurement(
-                                source=self.source,
-                                measurement_type=measurement_type,
-                                value=mean(measurements_per_phasecode),
-                                description=description,
-                                phasecode=phasecode,
-                            )
-                        )
-            self.aggregation_cache = defaultdict(defaultdict(defaultdict(list).copy).copy)
-            self.time_of_last_aggregation: datetime = datetime.now()
 
-            return aggregated_measurements
+        aggregated_measurements = []
+        for measurement_type, cache_per_type in self.aggregation_cache.items():
+            for phasecode, cache_per_phasecode in cache_per_type.items():
+                for description, measurements_per_phasecode in cache_per_phasecode.items():
+                    aggregated_measurements.append(
+                        Measurement(
+                            source=self.source,
+                            measurement_type=measurement_type,
+                            value=mean(measurements_per_phasecode),
+                            description=description,
+                            phasecode=phasecode,
+                        ),
+                    )
+        self.aggregation_cache = defaultdict(defaultdict(defaultdict(list).copy).copy)
+        self.time_of_last_aggregation: datetime = datetime.now()
+
+        return aggregated_measurements
 
     async def update(self) -> list[Measurement]:
         """
@@ -76,7 +79,7 @@ class BaseAdapter:
 
 
 class HeishamonAdapter(BaseAdapter):
-    def __init__(self, ip_address: str):
+    def __init__(self, ip_address: str) -> None:
         super().__init__()
         self.url = f"http://{ip_address}/json"
         self.source = Source.HEISHAMON
@@ -88,7 +91,7 @@ class HeishamonAdapter(BaseAdapter):
             return []
 
         data = response.json()["heatpump"]
-        measurements = [
+        return [
             Measurement(
                 source=Source.HEISHAMON,
                 measurement_type=MeasurementType.FLOW,
@@ -133,11 +136,9 @@ class HeishamonAdapter(BaseAdapter):
             ),
         ]
 
-        return measurements
-
 
 class P1Adapter(BaseAdapter):
-    def __init__(self, ip_address: str):
+    def __init__(self, ip_address: str) -> None:
         super().__init__()
         self.url = f"http://{ip_address}/api/v1/data"
         self.source = Source.HOMEWIZARD_P1
@@ -179,7 +180,7 @@ class P1Adapter(BaseAdapter):
 
 
 class SolaxAdapter(BaseAdapter):
-    def __init__(self, serial_number, token_id):
+    def __init__(self, serial_number: str, token_id: str) -> None:
         super().__init__()
         self.url = (
             f"https://www.solaxcloud.com/proxyApp/proxy/api/getRealtimeInfo.do?tokenId={token_id}&sn={serial_number}"
@@ -207,5 +208,5 @@ class SolaxAdapter(BaseAdapter):
                 timestamp=datetime.strptime(data["uploadTime"], SOLAX_DATETIME_FORMAT),
                 measurement_type=MeasurementType.POWER,
                 phasecode=PhaseCode.L3,  # Inverter is single phase (L3)
-            )
+            ),
         ]

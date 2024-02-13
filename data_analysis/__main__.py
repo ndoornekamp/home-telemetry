@@ -1,9 +1,8 @@
 import argparse
 
-from data_analysis.voltage import voltage
 from data_analysis.heatpump import heatpump_analysis
 from data_analysis.solar_vs_p1 import solar_vs_p1
-
+from data_analysis.voltage import voltage
 
 analyses = {"heatpump": heatpump_analysis, "solar": solar_vs_p1, "voltage": voltage}
 

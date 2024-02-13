@@ -7,7 +7,7 @@ from home_telemetry.models import Measurement, MeasurementType, PhaseCode
 
 
 @pytest.mark.parametrize(
-    "measurements,cache_expected",
+    ("measurements", "cache_expected"),
     [
         (
             [
@@ -16,7 +16,7 @@ from home_telemetry.models import Measurement, MeasurementType, PhaseCode
                     measurement_type=MeasurementType.VOLTAGE,
                     phasecode=PhaseCode.ALL,
                     description="Test description",
-                )
+                ),
             ],
             {MeasurementType.VOLTAGE: {PhaseCode.ALL: {"Test description": [1]}}},
         ),
@@ -76,7 +76,7 @@ from home_telemetry.models import Measurement, MeasurementType, PhaseCode
         ),
     ],
 )
-def test_adapter_cache(measurements: list[Measurement], cache_expected):
+def test_adapter_cache(measurements: list[Measurement], cache_expected: dict) -> None:
     adapter = BaseAdapter()
 
     adapter.aggregate(measurements)
@@ -84,7 +84,7 @@ def test_adapter_cache(measurements: list[Measurement], cache_expected):
     assert adapter.aggregation_cache == cache_expected
 
 
-def test_adapter_aggregation():
+def test_adapter_aggregation() -> None:
     adapter = BaseAdapter()
     adapter.source = None
     adapter.aggregation_cache = {

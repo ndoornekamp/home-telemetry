@@ -7,8 +7,8 @@ from home_telemetry.adapters import BaseAdapter
 from home_telemetry.models import Measurement, MeasurementType, PhaseCode, Source
 
 
-@pytest.fixture
-def mock_adapter_1():
+@pytest.fixture()
+def mock_adapter_1() -> BaseAdapter:
     measurements = [
         Measurement(
             source=Source.HEISHAMON,
@@ -16,7 +16,7 @@ def mock_adapter_1():
             value=18.0,
             description="test description",
             phasecode=PhaseCode.NONE,
-        )
+        ),
     ]
 
     adapter = BaseAdapter()
@@ -24,8 +24,8 @@ def mock_adapter_1():
     return adapter
 
 
-@pytest.fixture
-def mock_adapter_2():
+@pytest.fixture()
+def mock_adapter_2() -> BaseAdapter:
     aggregated_measurements = [
         Measurement(
             source=Source.HOMEWIZARD_P1,
@@ -55,7 +55,7 @@ def mock_adapter_2():
     return adapter
 
 
-def test_get_aggregated_measurements(mock_adapter_1, mock_adapter_2):
+def test_get_aggregated_measurements(mock_adapter_1: BaseAdapter, mock_adapter_2: BaseAdapter) -> None:
     aggregated_measurements = get_aggregated_measurements([mock_adapter_1, mock_adapter_2])
 
     assert len(aggregated_measurements) == 4

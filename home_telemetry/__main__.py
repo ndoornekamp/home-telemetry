@@ -1,16 +1,16 @@
 import asyncio
-import structlog
-
 from datetime import datetime
 from time import sleep
 
+import structlog
+
 from home_telemetry.adapters import BaseAdapter, HeishamonAdapter, P1Adapter, SolaxAdapter
 from home_telemetry.config import (
+    DATABASE_TYPE,
+    HEISHAMON_IP_ADDRESS,
     P1_IP_ADDRESS,
     SOLAX_SERIAL_NUMBER,
     SOLAX_TOKEN_ID,
-    HEISHAMON_IP_ADDRESS,
-    DATABASE_TYPE,
 )
 from home_telemetry.database import save_measurements
 from home_telemetry.models import Measurement
