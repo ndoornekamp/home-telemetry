@@ -6,26 +6,28 @@ from data_analysis.plotting import display_plot
 from home_telemetry.database import get_measurements
 from home_telemetry.models import MeasurementType, PhaseCode, Source
 
+START_DATE = datetime(2024, 5, 1)
+
 
 def voltage() -> None:
     p1_voltage_measurements_l1 = get_measurements(
         measurement_type=MeasurementType.VOLTAGE,
         source=Source.HOMEWIZARD_P1,
-        datetime_gte=datetime(2023, 12, 23),
+        datetime_gte=START_DATE,
         phase_code=PhaseCode.L1,
     )
 
     p1_voltage_measurements_l2 = get_measurements(
         measurement_type=MeasurementType.VOLTAGE,
         source=Source.HOMEWIZARD_P1,
-        datetime_gte=datetime(2023, 12, 23),
+        datetime_gte=START_DATE,
         phase_code=PhaseCode.L2,
     )
 
     p1_voltage_measurements_l3 = get_measurements(
         measurement_type=MeasurementType.VOLTAGE,
         source=Source.HOMEWIZARD_P1,
-        datetime_gte=datetime(2023, 12, 23),
+        datetime_gte=START_DATE,
         phase_code=PhaseCode.L3,
     )
 
