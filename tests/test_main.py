@@ -7,7 +7,7 @@ from home_telemetry.adapters import BaseAdapter
 from home_telemetry.models import Measurement, MeasurementType, PhaseCode, Source
 
 
-@pytest.fixture()
+@pytest.fixture
 def mock_adapter_1() -> BaseAdapter:
     measurements = [
         Measurement(
@@ -24,7 +24,7 @@ def mock_adapter_1() -> BaseAdapter:
     return adapter
 
 
-@pytest.fixture()
+@pytest.fixture
 def mock_adapter_2() -> BaseAdapter:
     aggregated_measurements = [
         Measurement(

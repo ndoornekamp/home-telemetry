@@ -9,7 +9,7 @@ test_db_engine = create_engine("sqlite+pysqlite:///:memory:", echo=True)
 Base.metadata.create_all(test_db_engine)
 
 
-@pytest.fixture()
+@pytest.fixture
 def measurements() -> list[Measurement]:
     return [
         Measurement(

@@ -19,7 +19,7 @@ psycopg2-binary = "^2.9.9"
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.4.0"
 black = "^23.3.0"
-ruff = "^0.0.265"
+ruff = "^0.9.1"
 mypy = "^1.2.0"
 types-requests = "^2.30.0.0"
 matplotlib = "^3.7.1"
@@ -29,8 +29,32 @@ pre-commit = "^3.6.1"
 
 [tool.ruff]
 line-length = 120
-lint.select = ["E", "W", "F", "I", "N", "UP", "YTT", "ANN", "ASYNC", "S", "B", "COM", "C4", "ICN", "PIE", "PT", "RET", "SIM", "TID", "ARG", "PTH", "ERA", "PGH", "PL", "PERF"]
-lint.ignore = ["N818", "S101", "ANN101", "PLR2004", "PLR0913"]
+lint.select = [
+    "E",
+    "W",
+    "F",
+    "I",
+    "N",
+    "UP",
+    "YTT",
+    "ANN",
+    "S",
+    "B",
+    "COM",
+    "C4",
+    "ICN",
+    "PIE",
+    "PT",
+    "RET",
+    "SIM",
+    "TID",
+    "ARG",
+    "PTH",
+    "ERA",
+    "PGH",
+    "PL",
+]
+lint.ignore = ["N818", "S101", "PLR2004", "PLR0913"]
 
 [build-system]
 requires = ["poetry-core"]
