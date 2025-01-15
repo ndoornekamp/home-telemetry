@@ -24,7 +24,7 @@ mypy = "^1.2.0"
 types-requests = "^2.30.0.0"
 matplotlib = "^3.7.1"
 tqdm = "^4.66.1"
-pyqt5 = "5.15.2"
+pyqt5 = "^5.15.2"
 pre-commit = "^3.6.1"
 
 [tool.ruff]
