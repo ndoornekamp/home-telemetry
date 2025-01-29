@@ -1,31 +1,31 @@
-[tool.poetry]
+[project]
+authors = [{ name = "Nick Doornekamp", email = "nddoornekamp@gmail.com" }]
+requires-python = "<4.0,>=3.9"
 name = "home-telemetry"
 version = "0.1.0"
 description = "Personal app for monitoring the heatpump and general energy consumption and production at home"
-authors = ["Nick Doornekamp <nddoornekamp@gmail.com>"]
 readme = "README.md"
-packages = [{ include = "home_telemetry" }]
+dependencies = [
+    "httpx<1.0.0,>=0.24.0",
+    "python-dotenv<2.0.0,>=1.0.0",
+    "sqlalchemy<3.0.0,>=2.0.12",
+    "requests<3.0.0,>=2.30.0",
+    "structlog<24.0.0,>=23.1.0",
+    "rich<14.0.0,>=13.5.2",
+    "psycopg2-binary<3.0.0,>=2.9.9",
+]
 
-[tool.poetry.dependencies]
-python = "^3.9"
-httpx = "^0.24.0"
-python-dotenv = "^1.0.0"
-sqlalchemy = "^2.0.12"
-requests = "^2.30.0"
-structlog = "^23.1.0"
-rich = "^13.5.2"
-psycopg2-binary = "^2.9.9"
-
-[tool.poetry.group.dev.dependencies]
-pytest = "^7.4.0"
-black = "^23.3.0"
-ruff = "^0.9.1"
-mypy = "^1.2.0"
-types-requests = "^2.30.0.0"
-matplotlib = "^3.7.1"
-tqdm = "^4.66.1"
-pyqt5 = "^5.15.2"
-pre-commit = "^3.6.1"
+[dependency-groups]
+dev = [
+    "pytest<8.0.0,>=7.4.0",
+    "ruff<1.0.0,>=0.9.1",
+    "mypy<2.0.0,>=1.2.0",
+    "types-requests<3.0.0.0,>=2.30.0.0",
+    "matplotlib<4.0.0,>=3.7.1",
+    "tqdm<5.0.0,>=4.66.1",
+    "pyqt5<6.0.0,>=5.15.2",
+    "pre-commit<4.0.0,>=3.6.1",
+]
 
 [tool.ruff]
 line-length = 120
@@ -54,8 +54,4 @@ lint.select = [
     "PGH",
     "PL",
 ]
-lint.ignore = ["N818", "S101", "PLR2004", "PLR0913"]
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+lint.ignore = ["N818", "S101", "PLR2004", "PLR0913", "COM812"]

@@ -36,8 +36,7 @@ class BaseAdapter:
         return None
 
     @abstractmethod
-    async def measure(self) -> list[Measurement]:
-        ...
+    async def measure(self) -> list[Measurement]: ...
 
     def aggregate(self, measurements: list[Measurement]) -> list[Measurement]:
         for measurement in measurements:
