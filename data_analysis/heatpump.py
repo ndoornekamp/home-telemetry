@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import matplotlib.pyplot as plt
 
 from data_analysis.plotting import display_plot
@@ -6,31 +8,40 @@ from home_telemetry.models import MeasurementType, Source
 
 
 def heatpump_analysis() -> None:
-    heatpump_flow_measurements = get_measurements(measurement_type=MeasurementType.FLOW, source=Source.HEISHAMON)
+    heatpump_flow_measurements = get_measurements(
+        measurement_type=MeasurementType.FLOW,
+        source=Source.HEISHAMON,
+        datetime_gte=datetime(2024, 9, 23),
+    )
     heatpump_main_inlet_measurements = get_measurements(
         measurement_type=MeasurementType.TEMPERATURE,
         source=Source.HEISHAMON,
         description="Main inlet",
+        datetime_gte=datetime(2024, 9, 23),
     )
     heatpump_main_outlet_measurements = get_measurements(
         measurement_type=MeasurementType.TEMPERATURE,
         source=Source.HEISHAMON,
         description="Main outlet",
+        datetime_gte=datetime(2024, 9, 23),
     )
     heatpump_main_target = get_measurements(
         measurement_type=MeasurementType.TEMPERATURE,
         source=Source.HEISHAMON,
         description="Main target",
+        datetime_gte=datetime(2024, 9, 23),
     )
     dhw_target = get_measurements(
         measurement_type=MeasurementType.TEMPERATURE,
         source=Source.HEISHAMON,
         description="DHW target",
+        datetime_gte=datetime(2024, 9, 23),
     )
     dhw_actual = get_measurements(
         measurement_type=MeasurementType.TEMPERATURE,
         source=Source.HEISHAMON,
         description="DHW actual",
+        datetime_gte=datetime(2024, 9, 23),
     )
 
     timestamps_heatpump = [measurement.timestamp for measurement in heatpump_flow_measurements]
