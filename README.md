@@ -8,30 +8,31 @@ Personal app for collecting and persisting data from:
 
 ## Setup
 
-This project uses `poetry` for package management. To create a new env with the required packages, run:
+This project uses `uv` for package management. To create a new env with the required packages, run:
 
 ```bash
-poetry install
+uv sync
 ```
 
 Or, if you don't need the dev dependencies:
 
 ```bash
-poetry install --without dev
+uv sync --without dev
+```
+
+### Non-Python dependencies for plotting
+
+```bash
+sudo apt install pyqt5-dev-tools
+
 ```
 
 ## Running the module locally
 
-Then, either open a poetry shell using `poetry shell` and then run the module using
+Then run the module using
 
 ```bash
-python -m home_telemetry
-```
-
-or combine the two using
-
-```bash
-poetry run python -m home_telemetry
+uv run python -m home_telemetry
 ```
 
 ## Docker
